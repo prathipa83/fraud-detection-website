@@ -8,15 +8,16 @@ from PIL import Image
 try:
     with open('final_model.sav', 'rb') as file:
         loaded_model = pickle.load(file)
-except Exception as e:
+except Exception as e: 
     st.error(f"Error loading model: {e}")
     st.stop()
 
 # Creating a function for prediction with caching
-@st.cache(allow_output_mutation=True)
-def predict_fraud(card1: float, card2: float, card4: int, card6: int,
-                  addr1: int, addr2: int, TransactionAmt: float,
+@st.cache_resource
+def predict_fraud(card1: float, card2: float, card4: int, card6: int, 
+                  addr1: int, addr2: int, TransactionAmt: float, 
                   P_emaildomain: int, ProductCD: int, DeviceType: int) -> float:
+    # Prepare input in the expected format
     input_array = np.array([[card1, card2, card4, card6, addr1, addr2, TransactionAmt,
                              P_emaildomain, ProductCD, DeviceType]])
     prediction = loaded_model.predict_proba(input_array)
@@ -86,6 +87,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
